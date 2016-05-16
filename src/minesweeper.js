@@ -30,24 +30,28 @@ function preload()
 
 function create()
 {
+	// Get input for the size of the grid.
 	var maxSize = 20;
 	var minSize = 6;
 	iWidthOfStarField = Math.min(Math.max(parseInt(document.getElementById("width").value), minSize), maxSize);
 	iHeightOfStarField = Math.min(Math.max(parseInt(document.getElementById("height").value), minSize), maxSize);
 
+	// Resize the canvas.
     iWidthOfStar = game.cache.getImage('closed').width;
     iHeightOfStar = game.cache.getImage('closed').height;
 	game.scale.setGameSize(iWidthOfStarField * iWidthOfStar + 350, iHeightOfStarField * iHeightOfStar);
 
+	// Set number of mines.
 	var minNumberOfMines = parseInt(minSize * minSize / 3);
 	var maxNumberOfMines = parseInt(iWidthOfStarField * iHeightOfStarField / 5);
 	iNumberOfMines = Math.min(Math.max(parseInt(document.getElementById("mines").value), minNumberOfMines), maxNumberOfMines);
+
+	// basic values, that need to be set.
+    strInformation = game.add.text(iWidthOfStarField * game.cache.getImage('closed').width + 10, 10, '', { fill: '#888888' });
+    time = 0;
 	iNumberOfOpenFields = 0;
 	iNumberOfFlaggedFields = 0;
 	bGameOver = false;
-
-    strInformation = game.add.text(iWidthOfStarField * game.cache.getImage('closed').width + 10, 10, '', { fill: '#888888' });
-    time = 0;
 
 	initStarfield();
 	initMines();
