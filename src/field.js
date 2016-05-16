@@ -33,18 +33,14 @@ function Field (x, y)
 
 	this.onClick = function()
 	{
-		debugInformation.text = "clicked on star: " + this.m_iPositionX + " " + this.m_iPositionY;
-		if (this.m_bIsNotOpened === true)
+		if (game.input.activePointer.leftButton.isDown)
 		{
-			if (game.input.activePointer.leftButton.isDown)
-			{
-				this.openField();
-			}
-			else if (game.input.activePointer.rightButton.isDown)
-			{
-				this.flagAsMine();
-			}
+			this.openField();
 		}
+		else if (game.input.activePointer.rightButton.isDown && this.m_bIsNotOpened === true)
+		{
+			this.flagAsMine();
+		}		
 		else if (game.input.activePointer.leftButton.isDown && game.input.activePointer.rightButton.isDown)
 		{
 			this.openSurroundingFields();
@@ -53,16 +49,16 @@ function Field (x, y)
 
 	this.openField = function()
 	{
-		//debugInformation.text = "left-clicked on star: " + this.m_iPositionX + " " + this.m_iPositionY;
-
 		if (this.m_bIsNotOpened === true && this.m_bIsFlagged === false)
 		{
+			iNumberOfOpenFields += 1;
 			this.m_bIsNotOpened = false;
+			//this.m_img.inputEnabled = false;
 
 			if (this.m_bIsMine)
 			{
 				this.m_img.loadTexture('mine', 0);
-				gameOver = true;
+				bGameOver = true;
 			}
 			else
 			{
@@ -81,8 +77,6 @@ function Field (x, y)
 					game.add.text(x, y, this.m_iSurroundingMines, { fill: '#000000', fontSize: '23px' })
 				}
 			}
-
-			//this.m_img.inputEnabled = false;
 		}
 	}
 
@@ -96,17 +90,17 @@ function Field (x, y)
 
 	this.flagAsMine = function()
 	{
-		//debugInformation.text = "right-clicked on star: " + this.m_iPositionX + " " + this.m_iPositionY;
-
 		if (this.m_bIsFlagged === false)
 		{
 			this.m_bIsFlagged = true;
 			this.m_img.loadTexture('flagged', 0);
+			iNumberOfFlaggedFields += 1;
 		}
 		else if (this.m_bIsFlagged === true)
 		{
 			this.m_bIsFlagged = false;
 			this.m_img.loadTexture('closed', 0);
+			iNumberOfFlaggedFields -= 1;
 		}
 	}
 
@@ -125,14 +119,14 @@ function Field (x, y)
 				this.m_surroundingFields.push(starfield[this.m_iPositionY - 1][this.m_iPositionX - 1]);
 			}
 			// top right
-			if (this.m_iPositionX < widthOfStarField - 1)
+			if (this.m_iPositionX < iWidthOfStarField - 1)
 			{
 				this.m_surroundingFields.push(starfield[this.m_iPositionY - 1][this.m_iPositionX + 1]);
 			}
 		}
 		
 		// bottom
-		if (this.m_iPositionY < heightOfStarField - 1)
+		if (this.m_iPositionY < iHeightOfStarField - 1)
 		{
 			this.m_surroundingFields.push(starfield[this.m_iPositionY + 1][this.m_iPositionX]);
 			// bottom left
@@ -141,7 +135,7 @@ function Field (x, y)
 				this.m_surroundingFields.push(starfield[this.m_iPositionY + 1][this.m_iPositionX - 1]);
 			}
 			// bottom right
-			if (this.m_iPositionX < widthOfStarField - 1)
+			if (this.m_iPositionX < iWidthOfStarField - 1)
 			{
 				this.m_surroundingFields.push(starfield[this.m_iPositionY + 1][this.m_iPositionX + 1]);
 			}
@@ -154,7 +148,7 @@ function Field (x, y)
 		}
 
 		// right
-		if (this.m_iPositionX < widthOfStarField - 1)
+		if (this.m_iPositionX < iWidthOfStarField - 1)
 		{
 			this.m_surroundingFields.push(starfield[this.m_iPositionY][this.m_iPositionX + 1]);
 		}
