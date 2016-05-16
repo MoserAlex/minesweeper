@@ -1,4 +1,4 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser_minesweeper', { preload: preload, create: create });
 //document.getElementById("width");
 var widthOfStarField;
 var heightOfStarField;
@@ -6,7 +6,7 @@ var numberOfMines;
 var starfield;
 var debugInformation;
 
-function reset()
+function restart()
 {
 	//game.destroy();
 	//game = new Phaser.Game(800, 600, Phaser.AUTO, '', { create: create });

@@ -4,17 +4,17 @@
         <meta charset="UTF-8" />
         <title>Minesweeper</title>
         <script src="src/phaser.min.js"></script>
-        <script src="src/minesweeper.js"></script>
-        <script src="src/field.js"></script>
     </head>
     <body>
-        <div>
+        <div id="phaser_minesweeper" oncontextmenu="return false;">
             <h1>Minesweeper</h1>
             <form>
-                <input id="width" type="number" value=4>
-                <input id="height" type="number" value=4>
-                <button onclick="reset()">Restart</button>
+                <input id="width" type="number" value="10">
+                <input id="height" type="number" value="10">
+                <button type="button" onclick="restart(); return false;">Restart</button>
             </form>
+            <script src="src/minesweeper.js"></script>
+            <script src="src/field.js"></script>
         </div>
     </body>
 </html>

@@ -18,7 +18,7 @@ function Field (x, y)
 	{
 		this.m_img = game.add.sprite(this.m_iPositionX * this.m_iWidth, this.m_iPositionY * this.m_iHeight, 'closed');
 		this.m_img.inputEnabled = true;
-		this.m_img.events.onInputDown.add(this.openField, this);
+		this.m_img.events.onInputDown.add(this.onClick, this);
 		this.getSurroundingFields();
 	}
 
@@ -31,13 +31,26 @@ function Field (x, y)
 		}
 	}
 
+	this.onClick = function()
+	{
+		if (game.input.activePointer.leftButton.isDown)
+		{
+			this.openField();
+		}
+		else if (game.input.activePointer.rightButton.isDown)
+		{
+			this.flagAsMine();
+		}		
+	}
+
 	this.openField = function()
 	{
-		debugInformation.text = "clicked on star: " + this.m_iPositionX + " " + this.m_iPositionY;
+		debugInformation.text = "left-clicked on star: " + this.m_iPositionX + " " + this.m_iPositionY;
 
 		if (this.m_bIsNotOpened === true)
 		{
 			this.m_bIsNotOpened = false;
+
 			if (this.m_bIsMine)
 			{
 				this.m_img.loadTexture('mine', 0);
@@ -59,6 +72,11 @@ function Field (x, y)
 				}
 			}
 		}
+	}
+
+	this.flagAsMine = function()
+	{
+		debugInformation.text = "right-clicked on star: " + this.m_iPositionX + " " + this.m_iPositionY;
 	}
 
 	this.getSurroundingFields = function()
