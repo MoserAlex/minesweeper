@@ -62,13 +62,14 @@ function Field (x, y)
 			if (this.m_bIsMine)
 			{
 				this.m_img.loadTexture('mine', 0);
+				gameOver = true;
 			}
 			else
 			{
 				this.m_img.loadTexture('open', 0);
 
-				var x = this.m_iPositionX * this.m_img.width + 15;
-				var y = this.m_iPositionY * this.m_img.height + 11;
+				var x = this.m_iPositionX * this.m_img.width + 13;
+				var y = this.m_iPositionY * this.m_img.height + 9;
 
 				if (this.m_iSurroundingMines === 0)
 				{

@@ -1,17 +1,21 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser_minesweeper', { preload: preload, create: create, update: update });
-//document.getElementById("width");
+var game = new Phaser.Game(360 + 350, 360, Phaser.AUTO, 'phaser_minesweeper', { preload: preload, create: create, update: update });
 var widthOfStarField;
 var heightOfStarField;
+var widthOfStar;
+var heightOfStar;
 var numberOfMines;
-var starfield;
-var debugInformation;
 var numberOfOpenFields;
+
+var starfield;
 var gameOver;
+
+var debugInformation;
 
 function restart()
 {
+	//game.paused = false;
 	game.destroy();
-	game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser_minesweeper', { preload: preload, create: create, update: update });
+	game = new Phaser.Game(widthOfStarField * widthOfStar + 350, heightOfStarField * heightOfStar, Phaser.AUTO, 'phaser_minesweeper', { preload: preload, create: create, update: update });
 }
 
 function preload()
@@ -20,8 +24,6 @@ function preload()
     game.load.image('flagged', 'assets/flagged.png');
     game.load.image('open', 'assets/open.png');
     game.load.image('mine', 'assets/mine.png');
-
-    debugInformation = game.add.text(450, 10, '', { fill: '#888888' });
 }
 
 function create()
@@ -29,16 +31,18 @@ function create()
 	var maxSize = 15;
 	var minSize = 6;
 
+    widthOfStar = game.cache.getImage('closed').width;
+    heightOfStar = game.cache.getImage('closed').height;
 	widthOfStarField = Math.min(Math.max(parseInt(document.getElementById("width").value), minSize), maxSize);
 	heightOfStarField = Math.min(Math.max(parseInt(document.getElementById("height").value), minSize), maxSize);
+	game.scale.setGameSize(widthOfStarField * widthOfStar + 350, heightOfStarField * heightOfStar);
 
 	var minNumberOfMines = minSize * minSize / 3;
 	var maxNumberOfMines = parseInt(widthOfStarField * heightOfStarField / 3);
 	numberOfMines = Math.min(Math.max(parseInt(document.getElementById("mines").value), minNumberOfMines), maxNumberOfMines);
 	numberOfOpenFields = 0;
 
-	//game.width = widthOfStarField * 40;
-	//game.height = heightOfStarField * 40;
+    debugInformation = game.add.text(widthOfStarField * game.cache.getImage('closed').width, 10, '', { fill: '#888888' });
 
 	initDebugInformation();
 	initStarfield();
@@ -70,8 +74,6 @@ function initStarfield()
 			starfield[y][x].init();
 		}
 	}
-
-	debugInformation.text = "End of initializing starfield";
 }
 
 function initMines()
@@ -90,11 +92,17 @@ function initMines()
 			starfield[y][x].setMine();
 		}
 	}
-
-	debugInformation.text = "End of initializing mines";
 }
 
 function update()
+{
+	if (gameOver === true)
+	{
+		//game.paused=true;
+	}
+}
+
+function checkForGameOver()
 {
 
 }
