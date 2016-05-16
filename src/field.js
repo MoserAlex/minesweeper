@@ -7,7 +7,7 @@ function Field (x, y)
 
 	this.m_bIsMine = false;
 	this.m_bIsFlagged = false;
-	this.m_bIsNotOpened = true;
+	this.m_bIsOpen = false;
 
 	this.m_img;
 	this.m_surroundingFields;
@@ -37,7 +37,7 @@ function Field (x, y)
 		{
 			this.openField();
 		}
-		else if (game.input.activePointer.rightButton.isDown && this.m_bIsNotOpened === true)
+		else if (game.input.activePointer.rightButton.isDown && this.m_bIsOpen === false)
 		{
 			this.flagAsMine();
 		}		
@@ -49,10 +49,10 @@ function Field (x, y)
 
 	this.openField = function()
 	{
-		if (this.m_bIsNotOpened === true && this.m_bIsFlagged === false)
+		if (this.m_bIsOpen === false && this.m_bIsFlagged === false)
 		{
 			iNumberOfOpenFields += 1;
-			this.m_bIsNotOpened = false;
+			this.m_bIsOpen = true;
 			//this.m_img.inputEnabled = false;
 
 			if (this.m_bIsMine)

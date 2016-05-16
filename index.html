@@ -9,9 +9,18 @@
         <div id="phaser_minesweeper" oncontextmenu="return false;">
             <h1>Minesweeper</h1>
             <form>
-                <p>Width: <input id="width" type="number" value="9"></p>
-                <p>Height: <input id="height" type="number" value="9"></p>
-                <p>Mines: <input id="mines" type="number" value="2"></p>
+                <p>
+                    Minimum width is 6, max width is 20.<br>
+                    Width: <input id="width" type="number" value="9">
+                </p>
+                <p>
+                    Minimum height is 6, max height is 20.<br>
+                    Height: <input id="height" type="number" value="9">
+                </p>
+                <p>
+                    Minimum number of mines is 12, maximum is the number of fields divided by 5.<br>
+                    Mines: <input id="mines" type="number" value="15">
+                </p>
                 <button type="button" onclick="restart(); return false;">Restart</button>
             </form>
             <script src="src/minesweeper.js"></script>

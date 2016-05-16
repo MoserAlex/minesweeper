@@ -12,6 +12,7 @@ var starfield;
 var bGameOver;
 
 var strInformation;
+var time;
 
 function restart()
 {
@@ -29,23 +30,24 @@ function preload()
 
 function create()
 {
-	var maxSize = 15;
+	var maxSize = 20;
 	var minSize = 6;
+	iWidthOfStarField = Math.min(Math.max(parseInt(document.getElementById("width").value), minSize), maxSize);
+	iHeightOfStarField = Math.min(Math.max(parseInt(document.getElementById("height").value), minSize), maxSize);
 
     iWidthOfStar = game.cache.getImage('closed').width;
     iHeightOfStar = game.cache.getImage('closed').height;
-	iWidthOfStarField = Math.min(Math.max(parseInt(document.getElementById("width").value), minSize), maxSize);
-	iHeightOfStarField = Math.min(Math.max(parseInt(document.getElementById("height").value), minSize), maxSize);
 	game.scale.setGameSize(iWidthOfStarField * iWidthOfStar + 350, iHeightOfStarField * iHeightOfStar);
 
-	var minNumberOfMines = minSize * minSize / 3;
-	var maxNumberOfMines = parseInt(iWidthOfStarField * iHeightOfStarField / 3);
+	var minNumberOfMines = parseInt(minSize * minSize / 3);
+	var maxNumberOfMines = parseInt(iWidthOfStarField * iHeightOfStarField / 5);
 	iNumberOfMines = Math.min(Math.max(parseInt(document.getElementById("mines").value), minNumberOfMines), maxNumberOfMines);
 	iNumberOfOpenFields = 0;
 	iNumberOfFlaggedFields = 0;
 	bGameOver = false;
 
-    strInformation = game.add.text(iWidthOfStarField * game.cache.getImage('closed').width, 10, '', { fill: '#888888' });
+    strInformation = game.add.text(iWidthOfStarField * game.cache.getImage('closed').width + 10, 10, '', { fill: '#888888' });
+    time = 0;
 
 	initStarfield();
 	initMines();
@@ -93,7 +95,13 @@ function initMines()
 
 function update()
 {
-	strInformation.text = "Mines left: " + (iNumberOfMines - iNumberOfFlaggedFields) + "\n";
+	if (iNumberOfOpenFields > 0)
+	{
+		time += game.time.elapsedMS;
+	}
+
+	strInformation.text = "Time: " + parseInt(time / 1000) + "\n";
+	strInformation.text += "Mines left: " + (iNumberOfMines - iNumberOfFlaggedFields) + "\n";
 	if (bGameOver === true)
 	{
 		game.paused = true;
@@ -104,6 +112,4 @@ function update()
 		game.paused = true;
 		strInformation.text += "Yay, you won!";
 	}
-
 }
-
