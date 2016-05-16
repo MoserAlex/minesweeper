@@ -1,43 +1,56 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser_minesweeper', { preload: preload, create: create });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser_minesweeper', { preload: preload, create: create, update: update });
 //document.getElementById("width");
 var widthOfStarField;
 var heightOfStarField;
 var numberOfMines;
 var starfield;
 var debugInformation;
+var numberOfOpenFields;
+var gameOver;
 
 function restart()
 {
-	//game.destroy();
-	//game = new Phaser.Game(800, 600, Phaser.AUTO, '', { create: create });
-	create();
+	game.destroy();
+	game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser_minesweeper', { preload: preload, create: create, update: update });
 }
 
 function preload()
 {
-    game.load.image('logo', 'assets/phaser.png');
     game.load.image('closed', 'assets/closed.png');
+    game.load.image('flagged', 'assets/flagged.png');
     game.load.image('open', 'assets/open.png');
     game.load.image('mine', 'assets/mine.png');
+
+    debugInformation = game.add.text(450, 10, '', { fill: '#888888' });
 }
 
 function create()
 {
-	widthOfStarField = parseInt(document.getElementById("width").value);
-	heightOfStarField = parseInt(document.getElementById("height").value);
-	numberOfMines = 10;
+	var maxSize = 15;
+	var minSize = 6;
 
-	placeDebugInformation();
-	placeStarfield();
-	placeMines();
+	widthOfStarField = Math.min(Math.max(parseInt(document.getElementById("width").value), minSize), maxSize);
+	heightOfStarField = Math.min(Math.max(parseInt(document.getElementById("height").value), minSize), maxSize);
+
+	var minNumberOfMines = minSize * minSize / 3;
+	var maxNumberOfMines = parseInt(widthOfStarField * heightOfStarField / 3);
+	numberOfMines = Math.min(Math.max(parseInt(document.getElementById("mines").value), minNumberOfMines), maxNumberOfMines);
+	numberOfOpenFields = 0;
+
+	//game.width = widthOfStarField * 40;
+	//game.height = heightOfStarField * 40;
+
+	initDebugInformation();
+	initStarfield();
+	initMines();
 }
 
-function placeDebugInformation()
+function initDebugInformation()
 {
-	debugInformation = game.add.text(450, 10, 'Debug', { fill: '#888888' });
+	debugInformation.text = "Debug";
 }
 
-function placeStarfield()
+function initStarfield()
 {
 	starfield = new Array();
 
@@ -46,7 +59,7 @@ function placeStarfield()
 		starfield[y] = new Array();
 		for (var x = 0; x < widthOfStarField; x++)
 		{
-				starfield[y][x] = new Field(y, x);
+			starfield[y][x] = new Field(x, y);
 		}
 	}
 
@@ -54,12 +67,14 @@ function placeStarfield()
 	{
 		for (var x = 0; x < widthOfStarField; x++)
 		{
-				starfield[y][x].init();
+			starfield[y][x].init();
 		}
 	}
+
+	debugInformation.text = "End of initializing starfield";
 }
 
-function placeMines()
+function initMines()
 {
 	for (var i = 0; i < numberOfMines; i++)
 	{
@@ -75,4 +90,11 @@ function placeMines()
 			starfield[y][x].setMine();
 		}
 	}
+
+	debugInformation.text = "End of initializing mines";
+}
+
+function update()
+{
+
 }
