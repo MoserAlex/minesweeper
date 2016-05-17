@@ -41,7 +41,7 @@ function Field (x, y)
 		{
 			this.flagAsMine();
 		}		
-		else if (game.input.activePointer.leftButton.isDown && game.input.activePointer.rightButton.isDown)
+		else if (game.input.activePointer.rightButton.isDown && this.m_bIsOpen === true)
 		{
 			this.openSurroundingFields();
 		}
@@ -69,7 +69,10 @@ function Field (x, y)
 
 				if (this.m_iSurroundingMines === 0)
 				{
-					this.openSurroundingFields();
+					for (var i = 0; i < this.m_surroundingFields.length; i++)
+					{
+						this.m_surroundingFields[i].openField();
+					}
 					game.add.text(x, y, '', { fill: '#000000', fontSize: '23px' })
 				}
 				else
@@ -82,9 +85,21 @@ function Field (x, y)
 
 	this.openSurroundingFields = function()
 	{
+		var surroundingFlags = 0;
 		for (var i = 0; i < this.m_surroundingFields.length; i++)
 		{
-			this.m_surroundingFields[i].openField();
+			if (this.m_surroundingFields[i].m_bIsFlagged === true)
+			{
+				surroundingFlags++;
+			}
+		}
+
+		if (surroundingFlags === this.m_iSurroundingMines)
+		{
+			for (var i = 0; i < this.m_surroundingFields.length; i++)
+			{
+				this.m_surroundingFields[i].openField();
+			}
 		}
 	}
 
